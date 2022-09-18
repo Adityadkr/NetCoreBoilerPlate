@@ -3,6 +3,7 @@ using CommonEntities.Services.IRepository;
 using CommonEntities.Services.Repository;
 using DbEntities;
 using DbServices.IRepositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -14,7 +15,9 @@ using static CommonEntities.Enums.Api.ApiCommonCode;
 
 namespace AppApi.Controllers
 {
+    
     [ApiController]
+   // [Authorize]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
@@ -33,6 +36,7 @@ namespace AppApi.Controllers
             _demo = demo;
         }
 
+        
         [HttpGet]
         public ResponseModel<List<User>> Get()
         {
