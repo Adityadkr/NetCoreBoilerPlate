@@ -5,15 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.10" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CommonEntities\CommonEntities.csproj" />
     <ProjectReference Include="..\DbServices\DbServices.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Files\Images\" />
+    <Folder Include="wwwroot\Files\Documents\" />
+    <Folder Include="wwwroot\Files\Videos\" />
   </ItemGroup>
 
 </Project>
