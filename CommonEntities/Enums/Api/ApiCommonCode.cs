@@ -20,5 +20,6 @@ namespace CommonEntities.Enums.Api
             Success = 100,
             Failure = 104
         }
+       
     }
 }

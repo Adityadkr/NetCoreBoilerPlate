@@ -64,6 +64,7 @@ namespace WebApp
 
             app.UseAuthentication();
             app.UseAuthorization();
+           
 
             app.UseEndpoints(endpoints =>
             {

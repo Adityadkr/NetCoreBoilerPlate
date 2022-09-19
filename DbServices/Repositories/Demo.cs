@@ -2,6 +2,7 @@
 using DbEntities;
 using DbServices.Helpers;
 using DbServices.IRepositories;
+using DbServices.Objects;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
@@ -38,7 +39,7 @@ namespace DbServices.Repositories
 
             //GET DATATBLE FROM JSON PARAMETERS
             sqlParameters.Add(new SqlParameter("@JSON", JsonConvert.SerializeObject(ROOT)));
-            dt = _dBHelper.GetDatatable("USP_JCRUD_USERS", CommandType.StoredProcedure, sqlParameters);
+            dt = _dBHelper.GetDatatable(DBOperations.USP_JCRUD_USERS, CommandType.StoredProcedure, sqlParameters);
 
 
             //GET DATATABLE USING SELECT QUERY

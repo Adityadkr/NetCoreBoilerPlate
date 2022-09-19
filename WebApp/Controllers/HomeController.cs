@@ -1,14 +1,20 @@
-﻿using DbServices.IRepositories;
+﻿using CommonEntities.Helpers;
+using CommonEntities.Objects;
+using DbEntities;
+using DbServices.IRepositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using WebApp.Helpers;
 using WebApp.Models;
@@ -32,6 +38,11 @@ namespace WebApp.Controllers
             //var data = _demo.getUsers();n
             try
             {
+                User user = new User();
+                user.FirstName = "NODE";
+                var response = await HttpHelper.Post<User>("https://localhost:44309/api/Account/login", user, ContentType.JSON);
+
+                var content = await response.Content.ReadAsStringAsync();
                 var claims = new[] {
 
                 new Claim("FirstName","test")
@@ -41,6 +52,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
+
             }
 
 
@@ -51,6 +63,8 @@ namespace WebApp.Controllers
         {
            
             var string1 =  this.User.FindFirst("FirstName").Value;
+
+            //var response = HttpHelper.
 
             return View();
         }
