@@ -44,7 +44,7 @@ namespace AppApi.Controllers
         [HttpGet]
         public ResponseModel<List<User>> Get()
         {
-            ResponseHelper<List<User>> helper = new ResponseHelper<List<User>>();
+            
             try
             {
                 var data = _cache.GetData<List<User>>("lstUsers");
@@ -53,7 +53,7 @@ namespace AppApi.Controllers
                 {
                     var result = _demo.getUsers();
                     // var response = helper.CreateResponse((int)API_CODE.Ok, "Data Found", API_STATUS.Success.ToString(), result);
-                    var response = _responseHelper.CreateResponse((int)API_CODE.Ok, "Data Found", API_STATUS.Success.ToString(), result);
+                     var response = _responseHelper.CreateResponse((int)API_CODE.Ok, "Data Found", API_STATUS.Success.ToString(), result);
                     _cache.SetData<List<User>>("lstUsers", result, DateTimeOffset.Now.AddMinutes(5.0));
                     return response;
                 }
@@ -65,7 +65,7 @@ namespace AppApi.Controllers
             }
             catch (Exception ex)
             {
-                return helper.HandleException(ex);
+                return _responseHelper.HandleException<List<User>>(ex);
             }
 
         }
