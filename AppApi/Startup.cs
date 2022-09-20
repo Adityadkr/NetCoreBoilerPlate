@@ -1,3 +1,5 @@
+using CommonEntities.Services.IRepository;
+using CommonEntities.Services.Repository;
 using DbServices.IRepositories;
 using DbServices.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -50,7 +52,15 @@ namespace AppApi
             });
             #endregion
 
+
+            #region Caching
+            services.AddMemoryCache();
+            #endregion
+
+            #region Repositories
             services.AddScoped<IDemo, Demo>();
+            services.AddScoped<ICacheService, CacheService>();
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -16,6 +16,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using WebApp.Filters;
 using WebApp.Helpers;
 using WebApp.Models;
 
@@ -33,14 +34,15 @@ namespace WebApp.Controllers
             _demo = demo;
         }
 
-        public async Task<IActionResult>Index()
+       // [TypeFilter(typeof(GlobalExceptionFilter))]
+        public async Task<IActionResult> Index()
         {
             //var data = _demo.getUsers();n
             try
             {
                 User user = new User();
                 user.FirstName = "NODE";
-                var response = await HttpHelper.Post<User>("https://localhost:44309/api/Account/login", user, ContentType.JSON);
+                var response = await HttpHelper.Post("https://localhost:44309/api/Account/login", user, ContentType.JSON);
 
                 var content = await response.Content.ReadAsStringAsync();
                 var claims = new[] {
@@ -48,11 +50,11 @@ namespace WebApp.Controllers
                 new Claim("FirstName","test")
                 };
                 SessionHelper.SignInAsync(claims, HttpContext);
-               
+
             }
             catch (Exception ex)
             {
-
+                throw ex;
             }
 
 
@@ -61,11 +63,7 @@ namespace WebApp.Controllers
 
         public IActionResult Privacy()
         {
-           
-            var string1 =  this.User.FindFirst("FirstName").Value;
-
-            //var response = HttpHelper.
-
+            var string1 = this.User.FindFirst("FirstName").Value;
             return View();
         }
 

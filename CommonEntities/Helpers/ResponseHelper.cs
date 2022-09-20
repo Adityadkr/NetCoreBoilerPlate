@@ -1,12 +1,11 @@
 ﻿using CommonEntities.Models.ApiModels;
-using CommonEntities.Services.IRepository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using static CommonEntities.Enums.Api.ApiCommonCode;
 
-namespace CommonEntities.Services.Repository
+namespace CommonEntities.Helpers
 {
     public class ResponseHelper<T>
     {
@@ -32,7 +31,7 @@ namespace CommonEntities.Services.Repository
             }
             if (w32ex != null)
             {
-                 code = w32ex.ErrorCode;
+                code = w32ex.ErrorCode;
                 // do stuff
             }
             ResponseModel<T> response = new ResponseModel<T>();

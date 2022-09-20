@@ -18,6 +18,7 @@ namespace AppApi.Controllers
     {
         private readonly IConfiguration _config;
         private readonly JWTHelper _jwtHelper;
+       
         public AccountController(IConfiguration config)
         {
             _config = config;

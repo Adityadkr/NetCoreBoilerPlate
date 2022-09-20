@@ -1,3 +1,5 @@
+using CommonEntities.Services.IRepository;
+using CommonEntities.Services.Repository;
 using DbServices.IRepositories;
 using DbServices.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -13,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApp.Filters;
 
 namespace WebApp
 {
@@ -29,19 +32,32 @@ namespace WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddControllersWithViews(config => config.Filters.Add(typeof(GlobalExceptionFilter)));
+
+            #region Authentication
             services.AddAuthentication(x =>
              {
                  x.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                  x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                 
+
              }).AddCookie();
+            #endregion
+
 
             //services.ConfigureApplicationCookie(options =>
             //{
             //    options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/AccessDenied");
             //});
 
+            #region Repositories
             services.AddScoped<IDemo, Demo>();
+            services.AddScoped<ICacheService, CacheService>();
+            #endregion
+
+
+            #region Caching
+            services.AddMemoryCache();
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +70,8 @@ namespace WebApp
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+
+
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -64,7 +82,7 @@ namespace WebApp
 
             app.UseAuthentication();
             app.UseAuthorization();
-           
+
 
             app.UseEndpoints(endpoints =>
             {
