@@ -1,6 +1,4 @@
-﻿
-
-using DbEntities;
+﻿using CommonEntities.Services.IRepository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -9,13 +7,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace CommonEntities.Helpers
+namespace CommonEntities.Services.Repository
 {
-    public class JWTHelper
+    public class JwtService: IJwtService
     {
         private readonly IConfiguration _configuration;
         private static readonly int jwtExpireyTime = 120;
-        public JWTHelper(IConfiguration configuration)
+        public JwtService(IConfiguration configuration)
         {
             _configuration = configuration;
         }

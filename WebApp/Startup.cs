@@ -52,6 +52,7 @@ namespace WebApp
             #region Repositories
             services.AddScoped<IDemo, Demo>();
             services.AddScoped<ICacheService, CacheService>();
+            services.AddScoped<IJwtService, JwtService>();
             #endregion
 
 

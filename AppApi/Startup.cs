@@ -60,6 +60,9 @@ namespace AppApi
             #region Repositories
             services.AddScoped<IDemo, Demo>();
             services.AddScoped<ICacheService, CacheService>();
+            services.AddScoped<IResponseHelper, ResponseHelper>();
+            services.AddScoped<IJwtService,JwtService>();
+      
             #endregion
         }
 

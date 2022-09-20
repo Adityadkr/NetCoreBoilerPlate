@@ -1,4 +1,5 @@
 ﻿using CommonEntities.Helpers;
+using CommonEntities.Services.IRepository;
 using DbEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +18,12 @@ namespace AppApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IConfiguration _config;
-        private readonly JWTHelper _jwtHelper;
+        private readonly IJwtService _jwtService;
        
-        public AccountController(IConfiguration config)
+        public AccountController(IConfiguration config, IJwtService jwtService)
         {
             _config = config;
-            _jwtHelper = new JWTHelper(_config);
+            _jwtService = jwtService;
         }
         [HttpPost]
         [Route("login")]      
@@ -34,7 +35,7 @@ namespace AppApi.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("FirstName", user.FirstName)
                 };
-                string token = _jwtHelper.GenerateJSONWebToken(claims);
+                string token = _jwtService.GenerateJSONWebToken(claims);
                 return Ok(token);
             }
             return Ok();

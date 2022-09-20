@@ -28,14 +28,16 @@ namespace AppApi.Controllers
         private readonly IConfiguration _config;
         private readonly IDemo _demo;
         private readonly ICacheService _cache;
+        private readonly IResponseHelper _responseHelper;
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(IDemo demo, ICacheService cache, ILogger<WeatherForecastController> logger, IConfiguration config)
+        public WeatherForecastController(IResponseHelper responseHelper, IDemo demo, ICacheService cache, ILogger<WeatherForecastController> logger, IConfiguration config)
         {
             _logger = logger;
             _config = config;
             _demo = demo;
             _cache = cache;
+            _responseHelper = responseHelper;
         }
 
 
@@ -50,13 +52,14 @@ namespace AppApi.Controllers
                 if (data == null)
                 {
                     var result = _demo.getUsers();
-                    var response = helper.CreateResponse((int)API_CODE.Ok, "Data Found", API_STATUS.Success.ToString(), result);
+                    // var response = helper.CreateResponse((int)API_CODE.Ok, "Data Found", API_STATUS.Success.ToString(), result);
+                    var response = _responseHelper.CreateResponse((int)API_CODE.Ok, "Data Found", API_STATUS.Success.ToString(), result);
                     _cache.SetData<List<User>>("lstUsers", result, DateTimeOffset.Now.AddMinutes(5.0));
                     return response;
                 }
                 else
                 {
-                    var response = helper.CreateResponse((int)API_CODE.Ok, "Data Found", API_STATUS.Success.ToString(), data);
+                    var response = _responseHelper.CreateResponse((int)API_CODE.Ok, "Data Found", API_STATUS.Success.ToString(), data);
                     return response;
                 }
             }

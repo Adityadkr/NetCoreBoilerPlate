@@ -1,16 +1,16 @@
 ﻿using CommonEntities.Models.ApiModels;
+using CommonEntities.Services.IRepository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using static CommonEntities.Enums.Api.ApiCommonCode;
 
-namespace CommonEntities.Helpers
+namespace CommonEntities.Services.Repository
 {
-    public class ResponseHelper<T>
+    public class ResponseHelper:IResponseHelper
     {
-
-        public ResponseModel<T> CreateResponse(int code, string message, string status, T data)
+        public ResponseModel<T> CreateResponse<T>(int code, string message, string status, T data)
         {
 
             ResponseModel<T> response = new ResponseModel<T>();
@@ -21,7 +21,7 @@ namespace CommonEntities.Helpers
             return response;
 
         }
-        public ResponseModel<T> HandleException(Exception ex)
+        public ResponseModel<T> HandleException<T>(Exception ex)
         {
             int code = 400;
             var w32ex = ex as Win32Exception;
