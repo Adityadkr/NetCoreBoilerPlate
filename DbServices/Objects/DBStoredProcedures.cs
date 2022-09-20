@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DbServices.Objects
 {
-    public static class DBOperations
+    public static class DBStoredProcedures
     {
         public static readonly string USP_JCRUD_USERS = "USP_JCRUD_USERS";
     }

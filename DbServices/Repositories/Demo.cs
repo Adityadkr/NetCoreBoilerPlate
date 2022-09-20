@@ -39,7 +39,7 @@ namespace DbServices.Repositories
 
             //GET DATATBLE FROM JSON PARAMETERS
             sqlParameters.Add(new SqlParameter("@JSON", JsonConvert.SerializeObject(ROOT)));
-            dt = _dBHelper.GetDatatable(DBOperations.USP_JCRUD_USERS, CommandType.StoredProcedure, sqlParameters);
+            dt = _dBHelper.GetDatatable(DBStoredProcedures.USP_JCRUD_USERS, CommandType.StoredProcedure, sqlParameters);
 
 
             //GET DATATABLE USING SELECT QUERY
