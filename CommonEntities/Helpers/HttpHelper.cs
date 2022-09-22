@@ -43,13 +43,14 @@ namespace CommonEntities.Helpers
                     var response = await client.SendAsync(httpRequest);
 
                     return response;
+                   
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-
+            
         }
 
         public static async Task<HttpResponseMessage> Post<T>(string url, T content, string contentType, string jwtToken = null, Dictionary<string, string> headers = null)

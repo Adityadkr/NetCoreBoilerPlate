@@ -1,4 +1,5 @@
-﻿using CommonEntities.Models;
+﻿using AutoMapper;
+using CommonEntities.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -88,7 +89,12 @@ namespace WebApp.Helpers
         }
         #endregion
 
-
-
+        #region AutoMapper
+        public static Mapper GetMapperConfig<T,T1>()
+        {
+            var config = new MapperConfiguration(mc => mc.CreateMap<T, T1>());
+            return new Mapper(config);
+        }
+        #endregion
     }
 }

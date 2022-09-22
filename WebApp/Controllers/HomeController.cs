@@ -1,12 +1,14 @@
 ﻿using CommonEntities.Helpers;
 using CommonEntities.Objects;
 using DbEntities;
+using DbEntities.Models.MongoModels;
 using DbServices.IRepositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -61,9 +63,24 @@ namespace WebApp.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
         {
-            var string1 = this.User.FindFirst("FirstName").Value;
+            // var string1 = this.User.FindFirst("FirstName").Value;
+            var data = _demo.GetAliens();
+
+            var findById = _demo.GetAliensByID("6311b676bc2c8b0ae3c0c3e6");
+
+            Alien alien = new Alien();
+            alien._id = ObjectId.Parse("632b5d0a5677012af4bc986d");
+            alien.name = "mongodb123";
+            alien.pass = "123";
+            alien.tech = "nosql23";
+            alien.sub = false;
+            alien.__v = 0;
+
+            //bool resultAdd = await _demo.AddAlien(alien);
+            //bool resultAdd = await _demo.UpdateAlien(alien);
+            bool resultDelete =   _demo.DeleteAlien(alien); 
             return View();
         }
 

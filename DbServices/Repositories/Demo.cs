@@ -1,30 +1,36 @@
 ﻿using AutoMapper;
 using DbEntities;
+using DbEntities.Models.MongoModels;
 using DbServices.Helpers;
 using DbServices.IRepositories;
 using DbServices.Objects;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DbServices.Repositories
 {
     public class Demo : IDemo
     {
+
         private readonly IConfiguration _configuration;
         private readonly string con;
         private readonly SqlDBHelper _dBHelper;
+        private readonly MongoDBHelper _mongodBHelper;
         private readonly Mapper _mapper;
         //string ss = _configuration.GetConnectionString("defaultConnection").ToString();
         public Demo(IConfiguration configuration)
         {
             _configuration = configuration;
             _dBHelper = new SqlDBHelper(configuration);
-            
+            _mongodBHelper = new MongoDBHelper("AlienDBex",_configuration);
+
             con = _configuration.GetConnectionString("defaultConnection").ToString();
         }
 
@@ -53,6 +59,63 @@ namespace DbServices.Repositories
             // DataSet dS = _dBHelper.GetDataSet("SELECT * FROM [USERS] WHERE FirstName = @test",CommandType.Text,sqlParameters);
             List<User> result = JsonConvert.DeserializeObject<List<User>>(JsonConvert.SerializeObject(dt)); ;
             return result;
+        }
+        public List<Alien> GetAliens()
+        {
+            var data =  _mongodBHelper.Get<Alien>("aliens");
+            return data;
+
+        }
+
+        public Alien GetAliensByID(string id)
+        {
+            try
+            {
+                var data =  _mongodBHelper.GetByKey<Alien>("aliens", x => x._id == ObjectId.Parse(id));
+                return data;
+            }
+            catch (Exception ex) {
+                throw ex;
+            }
+            
+
+        }
+
+        //public bool AddAlien(Alien alien)
+        //{
+        //    var data =  _mongodBHelper.InsertOne<Alien>("aliens",alien);
+        //    return data;
+
+        //}
+        //public bool UpdateAlien(Alien alien)
+        //{
+        //    var data =   _mongodBHelper.UpdateOne<Alien>("aliens", alien,x=>x._id == alien._id);
+        //    return data;
+
+        //}
+        //public bool DeleteAlien(Alien alien)
+        //{
+        //    var data =  _mongodBHelper.DeleteOne<Alien>("aliens",  x => x._id == alien._id);
+        //    return data;
+
+        //}
+        public bool AddAlien(Alien alien)
+        {
+            var data =  _mongodBHelper.InsertOne<Alien>("aliens", alien);
+            return data;
+
+        }
+        public bool UpdateAlien(Alien alien)
+        {
+            var data = _mongodBHelper.UpdateOne<Alien>("aliens", alien, x => x._id == alien._id);
+            return data;
+
+        }
+        public bool DeleteAlien(Alien alien)
+        {
+            var data =  _mongodBHelper.DeleteOne<Alien>("aliens", x => x._id == alien._id);
+            return data;
+
         }
 
     }
