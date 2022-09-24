@@ -5,13 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace WebApp.Helpers
 {
     public static class CommonHelper
     {
-       
+     
         static CommonHelper()
         {
 
@@ -94,6 +96,54 @@ namespace WebApp.Helpers
         {
             var config = new MapperConfiguration(mc => mc.CreateMap<T, T1>());
             return new Mapper(config);
+        }
+        #endregion  
+
+        #region BcryptPassword
+        private static string GetRandomSalt()
+        {
+            return BCrypt.Net.BCrypt.GenerateSalt(12);
+        }
+        public static string EncryptPassword(string password) {
+
+           return  BCrypt.Net.BCrypt.HashPassword(password,GetRandomSalt());
+        }
+        public static bool VerifyPassword(string password,string hashedPassword)
+        {
+
+            return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
+        }
+        #endregion
+
+
+        #region EncryptDecryptString
+        public static string Encrypt(this string s)
+        {
+            if (String.IsNullOrEmpty(s))
+            {
+                return s;
+            }
+            else
+            {
+                var encoding = new UTF8Encoding();
+                byte[] plain = encoding.GetBytes(s);
+                byte[] secret = ProtectedData.Protect(plain, null, DataProtectionScope.CurrentUser);
+                return Convert.ToBase64String(secret);
+            }
+        }
+        public static string Decrypt(this string s)
+        {
+            if (String.IsNullOrEmpty(s))
+            {
+                return s;
+            }
+            else
+            {
+                byte[] secret = Convert.FromBase64String(s);
+                byte[] plain = ProtectedData.Unprotect(secret, null, DataProtectionScope.CurrentUser);
+                var encoding = new UTF8Encoding();
+                return encoding.GetString(plain);
+            }
         }
         #endregion
     }

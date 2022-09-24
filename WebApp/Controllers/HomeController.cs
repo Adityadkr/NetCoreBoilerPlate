@@ -80,7 +80,12 @@ namespace WebApp.Controllers
 
             //bool resultAdd = await _demo.AddAlien(alien);
             //bool resultAdd = await _demo.UpdateAlien(alien);
-            bool resultDelete =   _demo.DeleteAlien(alien); 
+            bool resultDelete =   _demo.DeleteAlien(alien);
+
+
+            string sentence = "mystring";
+            string encrypt = sentence.Encrypt();
+            string decrypt = encrypt.Decrypt();
             return View();
         }
 
