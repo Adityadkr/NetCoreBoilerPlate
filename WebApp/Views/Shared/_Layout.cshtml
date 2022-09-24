@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - WebApp</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+
+    @await Html.PartialAsync("_css")
 </head>
-<body>
+<body onload="loader()">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -29,9 +29,37 @@
             </div>
         </nav>
     </header>
+    @await Html.PartialAsync("_scripts")
+
+    @RenderSection("Scripts", required: false)
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody()
+            @*<div id="loading-div-background">
+                <div id="loading-div" class="ui-corner-all">
+                    <div id="loadingbar"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+                    <h2 style="color:gray;font-weight:normal;">Please wait....</h2>
+                </div>
+            </div>*@
+
+            <div class="modal fade" id="loading-div-background" role="dialog">
+                <div class="modal-dialog">
+
+                     Modal content
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            Loading..
+                        </div>
+                       
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="content">
+
+                @RenderBody()
+            </div>
         </main>
     </div>
 
@@ -40,9 +68,25 @@
             &copy; 2022 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
+    <script>
+       
+        $(window).on('load', function () {
+           
+            setTimeout(function () {
+                $("#loading-div-background").modal("close").fadeOut(100)
+                $("#content").show();
+
+            },5000)
+            
+        });
+        $(window).on('beforeunload', function () {
+           
+            $("#loading-div-background").modal({ backdrop: "static" }).fadeIn(150);
+            $("#content").hide();
+        });
+     
+      
+    </script>
+
 </body>
 </html>

@@ -5,6 +5,7 @@ using DbEntities.Models.MongoModels;
 using DbServices.IRepositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using WebApp.Filters;
 using WebApp.Helpers;
@@ -59,13 +61,14 @@ namespace WebApp.Controllers
                 throw ex;
             }
 
-
-            return View();
+            throw new Exception();
+           // return View();
         }
 
         public async Task<IActionResult> Privacy()
         {
             // var string1 = this.User.FindFirst("FirstName").Value;
+           // Thread.Sleep(5000);
             var data = _demo.GetAliens();
 
             var findById = _demo.GetAliensByID("6311b676bc2c8b0ae3c0c3e6");
@@ -86,13 +89,37 @@ namespace WebApp.Controllers
             string sentence = "mystring";
             string encrypt = sentence.Encrypt();
             string decrypt = encrypt.Decrypt();
-            return View();
+            List<DbEntities.User> users = new List<DbEntities.User>();
+            for (int i = 0; i < 10000; i++) {
+
+                DbEntities.User u = new DbEntities.User();
+                u.FirstName = "Name" + i;
+                u.LastName = "Surame" + i;
+                users.Add(u);
+            }
+
+            return View(users);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var exception = HttpContext.Features
+            .Get<IExceptionHandlerFeature>();
+
+            ViewData["statusCode"] = HttpContext.
+                        Response.StatusCode;
+            ViewData["message"] = exception.Error.Message;
+            ViewData["stackTrace"] = exception.
+                        Error.StackTrace;
+            return View();
+        }
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+      
+        public IActionResult Errors(int error)
+        {
+          
+            return View(error);
         }
     }
 }

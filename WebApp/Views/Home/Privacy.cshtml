@@ -1,6 +1,36 @@
-﻿@{
+﻿
+@model IEnumerable<DbEntities.User>
+@{
     ViewData["Title"] = "Privacy Policy";
 }
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>
+
+<table id="example" class="table table-bordered table-responsive table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Position</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+
+            </tr>
+        }
+
+
+    </tbody>
+</table>
+
+<script>
+    $(document).ready( function () {
+        $('#example').DataTable();
+    });
+</script>

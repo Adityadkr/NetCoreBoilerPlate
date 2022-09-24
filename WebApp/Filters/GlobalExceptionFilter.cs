@@ -14,12 +14,12 @@ namespace WebApp.Filters
         {
             
            
-            var result = new ViewResult { ViewName = "Error" };
-            result.ViewData.Add("Exception", context.Exception);
+           // var result = new ViewResult { ViewName = "Error" };
+           // result.ViewData.Add("Exception", context.Exception);
 
             // Here we can pass additional detailed data via ViewData
-            context.ExceptionHandled = true; // mark exception as handled
-            context.Result = result;
+            //context.ExceptionHandled = true; // mark exception as handled
+            //context.Result = result;
           
         }
     }

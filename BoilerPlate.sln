@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{7F187B97-95A8-44F9-95C6-FC79EBC294A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csproj", "{7F187B97-95A8-44F9-95C6-FC79EBC294A6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentations", "Presentations", "{C86AB801-D231-44B1-BB67-91F6B068EB2D}"
 EndProject
@@ -11,13 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{8CD6EBCD-2ACD-46CE-AA90-0A9F7057D04E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbServices", "DbServices\DbServices.csproj", "{92F58718-678A-4059-950C-5555DFE42F4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbServices", "DbServices\DbServices.csproj", "{92F58718-678A-4059-950C-5555DFE42F4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbEntities", "Models\DbEntities.csproj", "{5EBFBEBB-5A5A-4467-85F6-BC397BBE25DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbEntities", "Models\DbEntities.csproj", "{5EBFBEBB-5A5A-4467-85F6-BC397BBE25DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonEntities", "CommonEntities\CommonEntities.csproj", "{762DABCF-9226-4EE4-9B5C-A08917EF996F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonEntities", "CommonEntities\CommonEntities.csproj", "{762DABCF-9226-4EE4-9B5C-A08917EF996F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppApi", "AppApi\AppApi.csproj", "{E57450CB-28A5-402C-8D28-4C821147AEEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppApi", "AppApi\AppApi.csproj", "{E57450CB-28A5-402C-8D28-4C821147AEEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

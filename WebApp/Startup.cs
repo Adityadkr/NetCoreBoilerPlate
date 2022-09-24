@@ -66,18 +66,33 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+               
+
+
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-
+                app.UseStatusCodePages(async context => {
+                    if (context.HttpContext.Response.StatusCode == 400)
+                    {
+                        context.HttpContext.Response.Redirect("Errors?error=400");
+                    }
+                    else if (context.HttpContext.Response.StatusCode == 404)
+                    {
+                        context.HttpContext.Response.Redirect("Errors?error=404");
+                    }
+                });
 
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+          
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
