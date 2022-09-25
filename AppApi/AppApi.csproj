@@ -11,6 +11,9 @@
 
   <ItemGroup>
     <Folder Include="Helpers\" />
+    <Folder Include="wwwroot\Files\Documents\" />
+    <Folder Include="wwwroot\Files\Images\" />
+    <Folder Include="wwwroot\Files\Videos\" />
   </ItemGroup>
 
   <ItemGroup>

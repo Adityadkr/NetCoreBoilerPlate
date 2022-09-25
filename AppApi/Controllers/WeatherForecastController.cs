@@ -12,6 +12,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using static CommonEntities.Enums.Api.ApiCommonCode;
 using CommonEntities.Services.IRepository;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using WebApp.Helpers;
 
 namespace AppApi.Controllers
 {
@@ -30,14 +34,16 @@ namespace AppApi.Controllers
         private readonly ICacheService _cache;
         private readonly IResponseHelper _responseHelper;
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IWebHostEnvironment _host;
 
-        public WeatherForecastController(IResponseHelper responseHelper, IDemo demo, ICacheService cache, ILogger<WeatherForecastController> logger, IConfiguration config)
+        public WeatherForecastController(IWebHostEnvironment host,IResponseHelper responseHelper, IDemo demo, ICacheService cache, ILogger<WeatherForecastController> logger, IConfiguration config)
         {
             _logger = logger;
             _config = config;
             _demo = demo;
             _cache = cache;
             _responseHelper = responseHelper;
+            _host = host;
         }
 
 
@@ -68,6 +74,21 @@ namespace AppApi.Controllers
                 return _responseHelper.HandleException<List<User>>(ex);
             }
 
+        }
+
+        [HttpPost]
+        [Route("UploadFile")]
+        public bool UploadFile() {
+
+            var file = HttpContext.Request.Form.Files;
+            var path = _host.WebRootPath;
+            var imagePath = _config.GetValue<string>("DocumentPath:Images");
+            string[] type = { ".jpeg" };
+            var result = CommonHelper.ValidateFile(file[0],type, 2);
+            var fullPath = Path.Combine(path, imagePath);
+
+            var document = CommonHelper.UploadFile(file[0], fullPath);
+            return true;
         }
     }
 }

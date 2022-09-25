@@ -13,7 +13,7 @@ namespace WebApp.Helpers
 {
     public static class CommonHelper
     {
-     
+
         static CommonHelper()
         {
 
@@ -32,7 +32,7 @@ namespace WebApp.Helpers
                 }
                 else if (fileSize > (sizeInMb * 1024 * 1024))
                 {
-                    if (sizeInMb < 1024)
+                    if (sizeInMb < 1)
                     {
                         return "File cannot be more than " + (sizeInMb * 1024) + " KB";
                     }
@@ -46,13 +46,13 @@ namespace WebApp.Helpers
                     return "Valid file";
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
 
-            
-           
+
+
         }
         public static FileModel UploadFile(IFormFile oFile, string path)
         {
@@ -64,10 +64,10 @@ namespace WebApp.Helpers
                     Directory.CreateDirectory(path);
                 }
                 var fileModel = new FileModel();
-              
 
-                string FileName = oFile.FileName+"_"+Guid.NewGuid().ToString() + Path.GetExtension(oFile.FileName);
-                string FilePath = path;
+
+                string FileName = oFile.FileName + "_" + Guid.NewGuid().ToString() + Path.GetExtension(oFile.FileName);
+                string FilePath = Path.Combine(path, FileName);
 
                 using (var stream = new FileStream(FilePath, FileMode.Create))
                 {
@@ -77,22 +77,31 @@ namespace WebApp.Helpers
                 fileModel.FILE_NAME = oFile.FileName;
                 fileModel.FILE_PATH = FilePath;
                 fileModel.FILE_SAVED_NAME = FileName;
-                fileModel.FILE_SIZE = (oFile.Length * 1024 * 1024).ToString();
+                fileModel.FILE_SIZE = GetFileSize(FilePath).ToString();
                 fileModel.FILE_TYPE = Path.GetExtension(oFile.FileName);
 
                 return fileModel;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
-           
 
+
+        }
+
+        static long GetFileSize(string FilePath)
+        {
+            if (File.Exists(FilePath))
+            {
+                return new FileInfo(FilePath).Length;
+            }
+            return 0;
         }
         #endregion
 
         #region AutoMapper
-        public static Mapper GetMapperConfig<T,T1>()
+        public static Mapper GetMapperConfig<T, T1>()
         {
             var config = new MapperConfiguration(mc => mc.CreateMap<T, T1>());
             return new Mapper(config);
@@ -104,11 +113,12 @@ namespace WebApp.Helpers
         {
             return BCrypt.Net.BCrypt.GenerateSalt(12);
         }
-        public static string EncryptPassword(string password) {
+        public static string EncryptPassword(string password)
+        {
 
-           return  BCrypt.Net.BCrypt.HashPassword(password,GetRandomSalt());
+            return BCrypt.Net.BCrypt.HashPassword(password, GetRandomSalt());
         }
-        public static bool VerifyPassword(string password,string hashedPassword)
+        public static bool VerifyPassword(string password, string hashedPassword)
         {
 
             return BCrypt.Net.BCrypt.Verify(password, hashedPassword);

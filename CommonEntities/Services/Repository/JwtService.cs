@@ -1,15 +1,17 @@
 ﻿using CommonEntities.Services.IRepository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
 namespace CommonEntities.Services.Repository
 {
-    public class JwtService: IJwtService
+    public class JwtService : IJwtService
     {
         private readonly IConfiguration _configuration;
         private static readonly int jwtExpireyTime = 120;
@@ -30,6 +32,12 @@ namespace CommonEntities.Services.Repository
               signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        public string ReadJwtToken(string token)
+        {
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
+            var claims = jwt.Claims.ToList();
+            return JsonConvert.SerializeObject(claims);
         }
     }
 }

@@ -1,3 +1,4 @@
+using CommonEntities.Models.Email;
 using CommonEntities.Services.IRepository;
 using CommonEntities.Services.Repository;
 using DbServices.IRepositories;
@@ -62,7 +63,14 @@ namespace AppApi
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<IResponseHelper, ResponseHelper>();
             services.AddScoped<IJwtService,JwtService>();
-      
+            #endregion
+
+            #region Email
+            var emailConfig = Configuration
+            .GetSection("EmailConfiguration")
+            .Get<EmailConfigurationModel>();
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailService, EmailService>();
             #endregion
         }
 
@@ -89,7 +97,8 @@ namespace AppApi
             //UNCOMMENT WHEN YOU WANT TO  USER JWT AUTHENTICATION IN API
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseStaticFiles();
+            //app.UseMvc();
             app.UseCors(builder =>
             {
                 builder

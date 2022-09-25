@@ -1,5 +1,6 @@
 ﻿using CommonEntities.Helpers;
 using CommonEntities.Objects;
+using CommonEntities.Services.IRepository;
 using DbEntities;
 using DbEntities.Models.MongoModels;
 using DbServices.IRepositories;
@@ -31,11 +32,13 @@ namespace WebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
         private readonly IDemo _demo;
-        public HomeController(IDemo demo, ILogger<HomeController> logger, IConfiguration configuration)
+        private readonly IJwtService _jwt;
+        public HomeController(IJwtService jwt,IDemo demo, ILogger<HomeController> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
             _demo = demo;
+            _jwt = jwt;
         }
 
        // [TypeFilter(typeof(GlobalExceptionFilter))]
@@ -51,7 +54,8 @@ namespace WebApp.Controllers
                 var content = await response.Content.ReadAsStringAsync();
                 var claims = new[] {
 
-                new Claim("FirstName","test")
+                //new Claim("FirstName","test"),
+                new Claim("jwt",content)
                 };
                 SessionHelper.SignInAsync(claims, HttpContext);
 
@@ -61,14 +65,15 @@ namespace WebApp.Controllers
                 throw ex;
             }
 
-            throw new Exception();
-           // return View();
+            //throw new Exception();
+            return View();
         }
 
         public async Task<IActionResult> Privacy()
         {
-            // var string1 = this.User.FindFirst("FirstName").Value;
-           // Thread.Sleep(5000);
+            var string1 = this.User.FindFirst("jwt").Value;
+            // Thread.Sleep(5000);
+            var token = _jwt.ReadJwtToken(this.User.FindFirstValue("jwt"));
             var data = _demo.GetAliens();
 
             var findById = _demo.GetAliensByID("6311b676bc2c8b0ae3c0c3e6");
@@ -90,13 +95,13 @@ namespace WebApp.Controllers
             string encrypt = sentence.Encrypt();
             string decrypt = encrypt.Decrypt();
             List<DbEntities.User> users = new List<DbEntities.User>();
-            for (int i = 0; i < 10000; i++) {
+            //for (int i = 0; i < 10000; i++) {
 
-                DbEntities.User u = new DbEntities.User();
-                u.FirstName = "Name" + i;
-                u.LastName = "Surame" + i;
-                users.Add(u);
-            }
+            //    DbEntities.User u = new DbEntities.User();
+            //    u.FirstName = "Name" + i;
+            //    u.LastName = "Surame" + i;
+            //    users.Add(u);
+            //}
 
             return View(users);
         }

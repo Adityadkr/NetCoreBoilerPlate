@@ -1,3 +1,4 @@
+using CommonEntities.Models.Email;
 using CommonEntities.Services.IRepository;
 using CommonEntities.Services.Repository;
 using DbServices.IRepositories;
@@ -60,6 +61,14 @@ namespace WebApp
 
             #region Caching
             services.AddMemoryCache();
+            #endregion
+
+            #region Email
+            var emailConfig = Configuration
+            .GetSection("EmailConfiguration")
+            .Get<EmailConfigurationModel>();
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailService, EmailService>();
             #endregion
         }
 
