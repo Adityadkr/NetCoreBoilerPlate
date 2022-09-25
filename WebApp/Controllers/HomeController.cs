@@ -33,7 +33,7 @@ namespace WebApp.Controllers
         private readonly IConfiguration _configuration;
         private readonly IDemo _demo;
         private readonly IJwtService _jwt;
-        public HomeController(IJwtService jwt,IDemo demo, ILogger<HomeController> logger, IConfiguration configuration)
+        public HomeController(IJwtService jwt, IDemo demo, ILogger<HomeController> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
@@ -41,7 +41,7 @@ namespace WebApp.Controllers
             _jwt = jwt;
         }
 
-       // [TypeFilter(typeof(GlobalExceptionFilter))]
+        // [TypeFilter(typeof(GlobalExceptionFilter))]
         public async Task<IActionResult> Index()
         {
             //var data = _demo.getUsers();n
@@ -88,7 +88,7 @@ namespace WebApp.Controllers
 
             //bool resultAdd = await _demo.AddAlien(alien);
             //bool resultAdd = await _demo.UpdateAlien(alien);
-            bool resultDelete =   _demo.DeleteAlien(alien);
+            bool resultDelete = _demo.DeleteAlien(alien);
 
 
             string sentence = "mystring";
@@ -112,18 +112,21 @@ namespace WebApp.Controllers
             var exception = HttpContext.Features
             .Get<IExceptionHandlerFeature>();
 
-            ViewData["statusCode"] = HttpContext.
-                        Response.StatusCode;
-            ViewData["message"] = exception.Error.Message;
-            ViewData["stackTrace"] = exception.
-                        Error.StackTrace;
+            if (exception != null)
+            {
+                ViewData["statusCode"] = HttpContext.Response.StatusCode;
+
+                ViewData["message"] = string.IsNullOrEmpty(exception.Error.Message) ? "" : exception.Error.Message;
+                ViewData["stackTrace"] = string.IsNullOrEmpty(exception.Error.StackTrace) ? "" : exception.Error.StackTrace;
+            }
+
             return View();
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-      
+
         public IActionResult Errors(int error)
         {
-          
+
             return View(error);
         }
     }

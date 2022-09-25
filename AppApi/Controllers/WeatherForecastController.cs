@@ -21,7 +21,7 @@ namespace AppApi.Controllers
 {
 
     [ApiController]
-    // [Authorize]
+    //[Authorize]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
@@ -51,8 +51,7 @@ namespace AppApi.Controllers
         public ResponseModel<List<User>> Get()
         {
             
-            try
-            {
+           
                 var data = _cache.GetData<List<User>>("lstUsers");
 
                 if (data == null)
@@ -68,11 +67,7 @@ namespace AppApi.Controllers
                     var response = _responseHelper.CreateResponse((int)API_CODE.Ok, "Data Found", API_STATUS.Success.ToString(), data);
                     return response;
                 }
-            }
-            catch (Exception ex)
-            {
-                return _responseHelper.HandleException<List<User>>(ex);
-            }
+           
 
         }
 
@@ -89,6 +84,14 @@ namespace AppApi.Controllers
 
             var document = CommonHelper.UploadFile(file[0], fullPath);
             return true;
+        }
+
+        [HttpPost]
+        [Route("test")]
+        public bool test()
+        {
+
+            throw new Exception();
         }
     }
 }

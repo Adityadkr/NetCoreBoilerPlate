@@ -12,8 +12,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApp.Filters;
@@ -33,10 +36,10 @@ namespace WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
-            services.AddControllersWithViews(config => config.Filters.Add(typeof(GlobalExceptionFilter)));
+            // services.AddControllersWithViews(config => config.Filters.Add(typeof(GlobalExceptionFilter)));
 
             services.AddMvc();
-         
+
             #region Authentication
             services.AddAuthentication(x =>
              {
@@ -73,20 +76,22 @@ namespace WebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-               
+
 
 
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseStatusCodePages(async context => {
+                app.UseMiddleware(typeof(GlobalExceptionFilter));
+             //  app.UseExceptionHandler("/Home/Error");
+                app.UseStatusCodePages(async context =>
+                {
                     if (context.HttpContext.Response.StatusCode == 400)
                     {
                         context.HttpContext.Response.Redirect("Errors?error=400");
@@ -101,7 +106,6 @@ namespace WebApp
                 app.UseHsts();
             }
 
-          
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -117,6 +121,19 @@ namespace WebApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            #region logging
+            var Logs = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
+            var YearPath = Path.Combine(Logs, DateTime.Now.Year.ToString());
+            var MonthPath = Path.Combine(YearPath, CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Now.Month).ToString());
+            if (!Directory.Exists(MonthPath))
+            {
+                Directory.CreateDirectory(MonthPath);
+            }
+            var dateFile = DateTime.Now.ToString("dd_MM_yyyy") + ".txt";
+            var path = Path.Combine(MonthPath, dateFile);
+            loggerFactory.AddFile(path);
+            #endregion
         }
     }
 }

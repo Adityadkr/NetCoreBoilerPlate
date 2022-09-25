@@ -10,7 +10,8 @@ namespace WebApp.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            throw new Exception("system");
+            //return View();
         }
     }
 }

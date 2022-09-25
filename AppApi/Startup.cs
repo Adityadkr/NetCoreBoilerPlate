@@ -1,3 +1,4 @@
+using AppApi.Filters;
 using CommonEntities.Models.Email;
 using CommonEntities.Services.IRepository;
 using CommonEntities.Services.Repository;
@@ -15,6 +16,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -75,13 +78,13 @@ namespace AppApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseMiddleware(typeof(GlobalExceptionHandler));
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -111,6 +114,20 @@ namespace AppApi
             {
                 endpoints.MapControllers();
             });
+
+
+            #region logging
+            var Logs = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
+            var YearPath = Path.Combine(Logs, DateTime.Now.Year.ToString());
+            var MonthPath = Path.Combine(YearPath, CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Now.Month).ToString());
+            if (!Directory.Exists(MonthPath))
+            {
+                Directory.CreateDirectory(MonthPath);
+            }
+            var dateFile = DateTime.Now.ToString("dd_MM_yyyy")+".txt";
+            var path = Path.Combine(MonthPath, dateFile);
+            loggerFactory.AddFile(path);
+            #endregion
         }
     }
 }
