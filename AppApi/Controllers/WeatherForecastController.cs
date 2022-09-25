@@ -21,7 +21,7 @@ namespace AppApi.Controllers
 {
 
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {

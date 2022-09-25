@@ -41,7 +41,6 @@ namespace WebApp.Controllers
             _jwt = jwt;
         }
 
-        // [TypeFilter(typeof(GlobalExceptionFilter))]
         public async Task<IActionResult> Index()
         {
             //var data = _demo.getUsers();n

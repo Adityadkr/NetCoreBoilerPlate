@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -37,7 +38,33 @@ namespace AppApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(option =>
+            {
+                //option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                {
+                new OpenApiSecurityScheme
+                {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+                },
+                new string[]{}
+                }
+                });
+            });
 
             #region Authentication
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -65,7 +92,7 @@ namespace AppApi
             services.AddScoped<IDemo, Demo>();
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<IResponseHelper, ResponseHelper>();
-            services.AddScoped<IJwtService,JwtService>();
+            services.AddScoped<IJwtService, JwtService>();
             #endregion
 
             #region Email
@@ -78,7 +105,7 @@ namespace AppApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -124,7 +151,7 @@ namespace AppApi
             {
                 Directory.CreateDirectory(MonthPath);
             }
-            var dateFile = DateTime.Now.ToString("dd_MM_yyyy")+".txt";
+            var dateFile = DateTime.Now.ToString("dd_MM_yyyy") + ".txt";
             var path = Path.Combine(MonthPath, dateFile);
             loggerFactory.AddFile(path);
             #endregion
