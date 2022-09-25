@@ -7,7 +7,7 @@
 
     @await Html.PartialAsync("_css")
 </head>
-<body onload="loader()">
+<body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -73,7 +73,7 @@
         $(window).on('load', function () {
            
             setTimeout(function () {
-                $("#loading-div-background").modal("close").fadeOut(100)
+               // $("#loading-div-background").modal("close").fadeOut(100)
                 $("#content").show();
 
             },5000)
