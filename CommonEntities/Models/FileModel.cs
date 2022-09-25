@@ -12,6 +12,7 @@ namespace CommonEntities.Models
         public string FILE_TYPE { get; set; }
         public string FILE_SIZE { get; set; }
         public string FILE_PATH { get; set; }
+        public string HALF_FILE_PATH { get; set; }
        
     }
 }

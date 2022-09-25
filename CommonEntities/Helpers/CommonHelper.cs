@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace WebApp.Helpers
@@ -66,16 +67,17 @@ namespace WebApp.Helpers
                 var fileModel = new FileModel();
 
 
-                string FileName = oFile.FileName + "_" + Guid.NewGuid().ToString() + Path.GetExtension(oFile.FileName);
+                string FileName = Regex.Replace(oFile.FileName.Replace(" ", ""), @"[^0-9a-zA-Z]+", "") + "_" + Guid.NewGuid().ToString() + Path.GetExtension(oFile.FileName);
                 string FilePath = Path.Combine(path, FileName);
 
                 using (var stream = new FileStream(FilePath, FileMode.Create))
                 {
-                    oFile.CopyTo(stream);
+                  oFile.CopyTo(stream);
                 }
 
                 fileModel.FILE_NAME = oFile.FileName;
                 fileModel.FILE_PATH = FilePath;
+                fileModel.HALF_FILE_PATH = String.IsNullOrEmpty(FilePath.Split("wwwroot")[1]) ? "" : FilePath.Split("wwwroot")[1];
                 fileModel.FILE_SAVED_NAME = FileName;
                 fileModel.FILE_SIZE = GetFileSize(FilePath).ToString();
                 fileModel.FILE_TYPE = Path.GetExtension(oFile.FileName);
