@@ -18,7 +18,7 @@ function CreateCommonGridAjax(table, url, columns) {
     //[
     //    { "data": "id", "name": "Id" },
     //]
-
+    debugger
     $(table).DataTable({
         dom: 'Bfrtip',
         "autoWidth": false,

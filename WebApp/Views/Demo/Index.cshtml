@@ -23,7 +23,6 @@
 
 
     $(document).ready(function () {
-
         var column = [
             { "data": "name", "name": "name" },
             {
@@ -49,41 +48,39 @@
         ]
 
 
-        $.ajax({
-            url: "/Demo/GetAliens",
-            type: "GET",
-            dataType: 'json',
-            success: function (resp) {
-                debugger;
-                   
-                CreateCommonGridWithData("#tblAliens", resp, column)
-            }
-        })
+        //$.ajax({
+        //    url: "/Demo/GetAliens",
+        //    type: "GET",
+        //    dataType: 'json',
+        //    success: function (resp) {
+        //        debugger;
 
-        //var column = [
-        //            { "data": "name", "name": "name"},
-        //            {
-        //                data: "pass", render: function (data, type, row) {
-
-        //                    return '<span class="text-danger">' + data + '</span>';
-        //                }
-        //            },
-        //            {
-        //                "data": "name ", "name": "Edit", render: function (data, type, row) {
-
-        //                    return '<button class="btn btn-primary">Edit</span>';
-        //                }, "autoWidth": true
-        //            },
-        //            {
-        //                "data": "name", "name": "View", render: function (data, type, row) {
+        //        CreateCommonGridWithData("#tblAliens", resp, column)
+        //    }
+        //})
 
 
-        //                    return '<button class="btn btn-success">View</span>';
-        //                }, "autoWidth": true
-        //            }
+        CreateCommonGridAjax("#tblAliens", "/demo/getaliens", column)
 
-        //        ]
-        //CreateCommonGridAjax("#tblAliens", "/Demo/GetAliens",column)
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        toastr["success"]("My name is Inigo Montoya. You killed my father. Prepare to die!")    
+      
       
     })
 </script>
