@@ -19,6 +19,7 @@ namespace DbServices.Repositories
     public class Demo : IDemo
     {
 
+
         private readonly IConfiguration _configuration;
         private readonly string con;
         private readonly SqlDBHelper _dBHelper;
