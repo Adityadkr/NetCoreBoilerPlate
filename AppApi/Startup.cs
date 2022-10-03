@@ -93,6 +93,10 @@ namespace AppApi
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<IResponseHelper, ResponseHelper>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<ICustomer, Customers>();
+            services.AddScoped<IUsers, Users>();
+            services.AddScoped<IAccount, Account>();
+            services.AddScoped<IMaster, Master>();
             #endregion
 
             #region Email

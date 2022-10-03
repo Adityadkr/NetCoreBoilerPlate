@@ -42,6 +42,14 @@ namespace DbServices.Helpers
 
 
         }
+        public List<T> GetByKeyList<T>(string collectionName, Expression<Func<T, bool>> predicate)
+        {
+            var collection = DB.GetCollection<T>(collectionName);
+            var data = collection.Find(predicate).ToList();
+            return data;
+
+
+        }
 
         public bool InsertOne<T>(string collectionName, T data)
         {
@@ -49,6 +57,7 @@ namespace DbServices.Helpers
             {
                 if (data != null)
                 {
+                     
                     var collection = DB.GetCollection<T>(collectionName);
                     collection.InsertOne(data);
                     return true;

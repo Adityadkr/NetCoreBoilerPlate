@@ -10,6 +10,7 @@ namespace CommonEntities.Enums.Api
         public enum API_CODE
         {
             Ok = 200,
+            Failure = 201,
             DataNotFound = 404,
             BadRequest = 400,
             UnAuthorizedAccess = 403
