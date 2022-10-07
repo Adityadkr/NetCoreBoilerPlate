@@ -3,6 +3,7 @@ using DbEntities.Models.MongoModels;
 using DbServices.Helpers;
 using DbServices.IRepositories;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,7 +29,7 @@ namespace DbServices.Repositories
             {
                 _mongodBHelper.InsertOne<MasterCode>("masters", master);
                 var data = _mongodBHelper.Get<MasterCode>("masters");
-                return data[data.Count - 1];
+                return master;
             }
             catch (Exception ex)
             {
@@ -61,5 +62,6 @@ namespace DbServices.Repositories
                 throw ex;
             }
         }
+       
     }
 }

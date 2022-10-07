@@ -97,6 +97,8 @@ namespace AppApi
             services.AddScoped<IUsers, Users>();
             services.AddScoped<IAccount, Account>();
             services.AddScoped<IMaster, Master>();
+            services.AddScoped<IBranch, Branch>();
+            services.AddScoped<IEmployee, Employee>();
             #endregion
 
             #region Email

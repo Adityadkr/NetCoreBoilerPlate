@@ -10,5 +10,6 @@ namespace DbServices.IRepositories
     {
         UserModel AddUser(UserModel user);
         string UserExists(LoginModel user);
+        List<UserModel> GetUsers(string role = null);
     }
 }

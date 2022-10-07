@@ -6,6 +6,7 @@ using DbServices.IRepositories;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DbServices.Repositories
@@ -57,6 +58,26 @@ namespace DbServices.Repositories
             else
             {
                 return new UserModel();
+            }
+
+
+        }
+        public List<UserModel> GetUsers(string role=null)
+        {
+            var userExists = _mongodBHelper.Get<UserModel>("users");
+
+            if (string.IsNullOrEmpty(role)) {
+                userExists = userExists.Where(x => x.role == role).ToList();
+            }
+
+            
+            if (userExists != null)
+            {
+                return userExists;
+            }
+            else
+            {
+                return new List<UserModel>();
             }
 
 

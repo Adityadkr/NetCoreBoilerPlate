@@ -1,9 +1,11 @@
 ﻿using CommonEntities.Models.ApiModels;
 using CommonEntities.Services.IRepository;
 using DbEntities.Models.MongoModels;
+using DbEntities.Models.MongoModels.ResponseModels;
 using DbServices.IRepositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,18 +20,22 @@ namespace AppApi.Controllers
     {
         private IResponseHelper _responseHelper;
         private IMaster _masterHelper;
+        private IUsers _userService;
         private ICacheService _cacheService;
-        public MastersController(IMaster masterHelper, IResponseHelper responseHelper, ICacheService cacheService)
+        public MastersController(IMaster masterHelper, IResponseHelper responseHelper, ICacheService cacheService, IUsers userService)
         {
             _masterHelper = masterHelper;
             _responseHelper = responseHelper;
             _cacheService = cacheService;
+            _userService = userService;
         }
 
         [HttpPost]
         [Route("addmaster")]
         public ResponseModel<MasterCode> AddMaster(MasterCode master)
         {
+            master._id = ObjectId.GenerateNewId();
+            master.insertedId = master._id.ToString();
             var result = _masterHelper.AddMaster(master);
             if (result.code == master.code)
             {
@@ -57,6 +63,19 @@ namespace AppApi.Controllers
 
             if (result.Count > 0)
             {
+                if (!string.IsNullOrEmpty(key1))
+                {
+                    result = result.Where(x => x.key1 == key1).ToList();
+                }
+                if (!string.IsNullOrEmpty(key2))
+                {
+
+                    result = result.Where(x => x.key2 == key2).ToList();
+                }
+                if (!string.IsNullOrEmpty(pcode))
+                {
+                    result = result.Where(x => x.pcode == pcode).ToList();
+                }
                 return _responseHelper.CreateResponse<List<MasterCode>>((int)API_CODE.Ok, "Data Found.", API_STATUS.Success.ToString(), result);
             }
             else
@@ -64,6 +83,31 @@ namespace AppApi.Controllers
                 return _responseHelper.CreateResponse<List<MasterCode>>((int)API_CODE.BadRequest, "Data Not Found.", API_STATUS.Failure.ToString(), null);
 
             }
+        }
+
+        [HttpGet]
+        [Route("getusers")]
+        public ResponseModel<List<DDModel>> GetUser(string role, string city = null)
+        {
+
+            var users = _userService.GetUsers(role);
+            var lstrole = _masterHelper.GetMaster().Where(x => x.key1 == "ROLES");
+            var result = (from u in users
+                          join r in lstrole on u.role equals r.insertedId
+                          where u.role == role
+
+
+                          select new DDModel
+                          {
+                              mstkey = u.username,
+                              mstvalue = u._id.ToString()
+                          }
+                          );
+
+                return _responseHelper.CreateResponse<List<DDModel>>((int)API_CODE.Ok, "Data Found.", API_STATUS.Success.ToString(),result.ToList());
+           
+
+
         }
     }
 }

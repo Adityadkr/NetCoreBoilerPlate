@@ -27,6 +27,16 @@ namespace DbServices.Helpers
             DB = _mongoClient.GetDatabase(dbName);
         }
 
+        public BsonArray ExecuteQuery(Command<BsonArray> array) 
+        {
+            return DB.RunCommand(array);
+        }
+        public IMongoCollection<T> GetCollection<T>(string collectionName)
+        {
+            var collection = DB.GetCollection<T>(collectionName);
+            return collection;
+        }
+
         public List<T> Get<T>(string collectionName)
         {
             var collection = DB.GetCollection<T>(collectionName);
@@ -51,18 +61,20 @@ namespace DbServices.Helpers
 
         }
 
-        public bool InsertOne<T>(string collectionName, T data)
+        public T InsertOne<T>(string collectionName, T data)
         {
             try
             {
                 if (data != null)
                 {
-                     
+                    
+                    
                     var collection = DB.GetCollection<T>(collectionName);
                     collection.InsertOne(data);
-                    return true;
+                    
+                    return data;
                 }
-                return false;
+                return data;
             }
             catch (Exception ex)
             {

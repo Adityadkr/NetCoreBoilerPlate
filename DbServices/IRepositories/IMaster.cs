@@ -9,6 +9,7 @@ namespace DbServices.IRepositories
     {
         MasterCode AddMaster(MasterCode master);
         List<MasterCode> GetMaster();
-      // List<MasterCode> GetMaster(string key1, string key2 = null, string pcode = null);
+      //  List<MasterCode> GetMaster(string key1, string key2 = null, string pcode = null);
+     
     }
 }

@@ -102,9 +102,15 @@ namespace DbServices.Repositories
         //}
         public bool AddAlien(Alien alien)
         {
+            alien._id = ObjectId.GenerateNewId();
+        
             var data =  _mongodBHelper.InsertOne<Alien>("aliens", alien);
-            return data;
 
+            if (data._id != null) 
+            {
+                return true;
+            }
+            return false;
         }
         public bool UpdateAlien(Alien alien)
         {
